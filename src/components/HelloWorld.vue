@@ -1,7 +1,7 @@
 <template>
     <div class="hello">
-        <h1>{{ msg }}</h1>
-        <h2>Essential Links</h2>
+        <h1 class="aaa">{{ msg }} {{ xxx }}</h1>
+        <h2 class="font-red">Essential Links</h2>
     </div>
 </template>
 
@@ -12,11 +12,24 @@ export default {
         return {
             msg: 'Welcome to Your Vue.js App'
         }
+    },
+    computed: {
+        xxx () {
+            return this.$store.state.bbb
+        }
     }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
+
+<style lang="scss">
+    @import './../scss/index.scss';
+    .aaa {
+        color: blue;
+    }
+</style>
+
 <style scoped>
 h1, h2 {
     font-weight: normal;

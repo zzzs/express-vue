@@ -13,10 +13,10 @@
 项目内容上主要是诗词为主，因为最近对这方面感兴趣了【装逼】，故取名【诗骚】
 
 ## 技术栈
-前后端分离
-后端 express mongodb socket
-前端 vue全家桶
-ui Mint UI
+* 前后端分离
+* 后端 express mongodb socket
+* 前端 vue全家桶
+* ui Mint UI
 
 ## Build Setup
 

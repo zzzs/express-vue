@@ -60,10 +60,6 @@ module.exports = {
             }
         },
         {
-            test: /\.scss$/,
-            loaders: ["style", "css", "sass"]
-        },
-        {
             test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
             loader: 'url-loader',
             options: {

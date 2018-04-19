@@ -23,8 +23,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
-<style lang="scss">
-    @import './../scss/index.scss';
+<style lang="less">
+    @import './../less/index.less';
     .aaa {
         color: blue;
     }

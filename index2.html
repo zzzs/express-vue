@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>chat</title>
+</head>
+<body>
+    <input type="text" id="content">
+    <button onclick="send()">send</button>
+    <script src="socket.io.js"></script>
+    <script>
+        function send()
+        {
+            socket.emit("new message", {msg: document.getElementById('content').value});
+        }
+        var socket = io.connect('ws://127.0.0.1:3000');
+        socket.emit("add user", {name: 'bob'});
+        socket.emit("new message", {msg: 'hello iam fine'});
+
+        socket.on('new message', function (data) {
+            alert(data.message.msg);
+        });
+    </script>
+</body>
+</html>

@@ -8,7 +8,7 @@
         </mt-header>
         <div class="chat-main">
             <div class="chat-panel">
-                <div :key="key" v-for="(item, key) in msgPool">
+                <div :class="username === item.username ? 'mine-msg' : ''" :key="key" v-for="(item, key) in msgPool">
                     {{ item.username }}: {{ item.msg }}
                 </div>
             </div>
@@ -23,35 +23,40 @@
 
 <script>
 import io from 'socket.io-client'
+import { MessageBox } from 'mint-ui'
 export default {
     name: 'Chatroom',
     created () {
-        this.socket = io.connect('ws://127.0.0.1:3000')
-        this.socket.emit('add user', {name: 'bob'})
-        // socket.emit('add user', {name: 'bob'})
-        // socket.emit('new message', {msg: 'hello iam fine'})
-
         var self = this
+        this.socket = io.connect('ws://127.0.0.1:3000')
+
         this.socket.on('new message', function (data) {
             self.msgPool.push({
                 username: data.username.name,
                 msg: data.message.msg
             })
         })
+
+        MessageBox.prompt('请输入骚名').then(({ value, action }) => {
+            self.username = value
+            self.socket.emit('add user', {name: value})
+        }).catch(() => {
+            self.$router.push('/')
+        })
+        // socket.emit('add user', {name: 'bob'})
+        // socket.emit('new message', {msg: 'hello iam fine'})
     },
     methods: {
         sendMsg () {
-            this.msgPool.push({
-                username: 'bob',
-                msg: this.msg
-            })
             this.socket.emit('new message', {msg: this.msg})
+            this.msg = ''
         }
     },
     data () {
         return {
             msg: '',
             msgPool: [],
+            username: '',
             socket: null
         }
     },

@@ -4,6 +4,9 @@ var socketServer = function (server) {
 
     var numUsers = 0;
 
+    var User = require('../models/user');
+    var user = new User();
+
     io.on('connection', function (socket) {
         var addedUser = false;
 
@@ -27,6 +30,29 @@ var socketServer = function (server) {
 
             // we store the username in the socket session for this client
             socket.username = username;
+
+            User.find({ name: username.name }).exec()
+            .then(
+                function(result) {
+                    if (result.length === 0) {
+                        User.create({ name: username.name, password: '123123', nickname: username.name }, function (err, small) {
+                            if (err) return handleError(err);
+                        })；
+                    }
+                },
+                function(err) {
+
+                }
+            );
+
+            // (function (user) {
+            //     if (user === null) {
+            //         Tank.create({ size: 'small' }, function (err, small) {
+            //             if (err) return handleError(err);
+            //         })
+            //     }
+            // });
+
             ++numUsers;
             addedUser = true;
             socket.emit('login', {

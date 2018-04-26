@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mt-header title="吟诗作对">
+        <mt-header :title="'吟诗作对（' + userNum + '）'">
             <router-link to="/" slot="left">
                 <mt-button icon="back">返回</mt-button>
             </router-link>
@@ -23,7 +23,7 @@
 
 <script>
 import io from 'socket.io-client'
-import { MessageBox } from 'mint-ui'
+import { Toast, MessageBox } from 'mint-ui'
 export default {
     name: 'Chatroom',
     created () {
@@ -37,14 +37,25 @@ export default {
             })
         })
 
+        this.socket.on('login', function (data) {
+            self.userNum = data.numUsers
+        })
+
+        this.socket.on('user joined', function (data) {
+            self.userNum = data.numUsers
+            Toast({
+                message: data.username.name + 'is coming',
+                position: 'bottom',
+                duration: 5000
+            })
+        })
+
         MessageBox.prompt('请输入骚名').then(({ value, action }) => {
             self.username = value
             self.socket.emit('add user', {name: value})
         }).catch(() => {
             self.$router.push('/')
         })
-        // socket.emit('add user', {name: 'bob'})
-        // socket.emit('new message', {msg: 'hello iam fine'})
     },
     methods: {
         sendMsg () {
@@ -57,7 +68,8 @@ export default {
             msg: '',
             msgPool: [],
             username: '',
-            socket: null
+            socket: null,
+            userNum: 0
         }
     },
     computed: {

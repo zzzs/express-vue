@@ -18,10 +18,10 @@ var socketServer = function (server) {
                 message: data
             });
             // we tell the client to execute 'new message'
-            // socket.broadcast.emit('new message', {
-            //     username: socket.username,
-            //     message: data
-            // });
+            socket.broadcast.emit('new message', {
+                username: socket.username,
+                message: data
+            });
         });
 
         // when the client emits 'add user', this listens and executes
@@ -37,7 +37,7 @@ var socketServer = function (server) {
                     if (result.length === 0) {
                         User.create({ name: username.name, password: '123123', nickname: username.name }, function (err, small) {
                             if (err) return handleError(err);
-                        })；
+                        });
                     }
                 },
                 function(err) {

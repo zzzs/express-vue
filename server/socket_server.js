@@ -4,15 +4,39 @@ var socketServer = function (server) {
 
     var numUsers = 0;
 
+    var Chat = require('../models/chat');
+
+    var Room = require('../models/room');
+
     var User = require('../models/user');
     var user = new User();
 
     io.on('connection', function (socket) {
         var addedUser = false;
 
+        Room.find().exec()
+        .then(
+            function(result) {
+                if (result.length === 0) {
+
+                }
+                socket.emit('roomdata', {
+                    room: result
+                });
+            },
+            function(err) {
+
+            }
+        );
+
         // when the client emits 'new message', this listens and executes
         socket.on('new message', function (data) {
             console.log(data, 'data');
+
+            Chat.create({ uname: socket.username.name, content: data.msg }, function (err, small) {
+                if (err) return handleError(err);
+            });
+
             socket.emit('new message', {
                 username: socket.username,
                 message: data

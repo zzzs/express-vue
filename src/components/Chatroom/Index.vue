@@ -8,6 +8,11 @@
         </mt-header>
         <div class="chat-main">
             <div class="chat-panel">
+                <h1>房间</h1>
+                <a @click="currentRoom = item._id" href="javascript:;" :key="key" v-for="(item, key) in roomData">{{ item.name }}</a>
+
+                <h2>当前房间： {{ currentRoom }}</h2>
+
                 <div :class="username === item.username ? 'mine-msg' : ''" :key="key" v-for="(item, key) in msgPool">
                     {{ item.username }}: {{ item.msg }}
                 </div>
@@ -29,6 +34,11 @@ export default {
     created () {
         var self = this
         this.socket = io.connect('ws://127.0.0.1:3000')
+
+        this.socket.on('roomdata', function (data) {
+            self.roomData = data.room
+            self.currentRoom = data.room[0]['_id']
+        })
 
         this.socket.on('new message', function (data) {
             self.msgPool.push({
@@ -59,7 +69,7 @@ export default {
     },
     methods: {
         sendMsg () {
-            this.socket.emit('new message', {msg: this.msg})
+            this.socket.emit('new message', {msg: this.msg, roomId: currentRoom})
             this.msg = ''
         }
     },
@@ -67,6 +77,8 @@ export default {
         return {
             msg: '',
             msgPool: [],
+            roomData: [],
+            currentRoom: '',
             username: '',
             socket: null,
             userNum: 0

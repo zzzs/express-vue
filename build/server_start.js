@@ -21,7 +21,8 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
-require('./socket_server')(server);
+require('./../server/socket_server')(server);
+require('./../server/mongodb');
 
 /**
  * Listen on provided port, on all network interfaces.

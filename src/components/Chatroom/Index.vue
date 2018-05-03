@@ -9,7 +9,7 @@
         <div class="chat-main">
             <div class="chat-panel">
                 <h1>房间</h1>
-                <a @click="currentRoom = item._id" href="javascript:;" :key="key" v-for="(item, key) in roomData">{{ item.name }}</a>
+                <a @click="clickRoom(item._id)" href="javascript:;" :key="key" v-for="(item, key) in roomData">{{ item.name }}</a>
 
                 <h2>当前房间： {{ currentRoom }}</h2>
 
@@ -62,15 +62,23 @@ export default {
 
         MessageBox.prompt('请输入骚名').then(({ value, action }) => {
             self.username = value
-            self.socket.emit('add user', {name: value})
+            self.socket.emit('add user', {name: value, roomId: this.currentRoom})
         }).catch(() => {
             self.$router.push('/')
         })
     },
     methods: {
         sendMsg () {
-            this.socket.emit('new message', {msg: this.msg, roomId: currentRoom})
+            this.socket.emit('new message', {msg: this.msg, roomId: this.currentRoom})
             this.msg = ''
+        },
+        clickRoom (roomId) {
+            if (this.currentRoom === roomId) {
+                return
+            }
+            var oldRoomId = this.currentRoom
+            this.currentRoom = roomId
+            this.socket.emit('join room', {roomId: this.currentRoom, oldRoomId: oldRoomId})
         }
     },
     data () {

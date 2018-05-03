@@ -37,15 +37,15 @@ var socketServer = function (server) {
                 if (err) return handleError(err);
             });
 
-            socket.emit('new message', {
+            socket.to(data.roomId).emit('new message', {
                 username: socket.username,
                 message: data
             });
             // we tell the client to execute 'new message'
-            socket.broadcast.emit('new message', {
-                username: socket.username,
-                message: data
-            });
+            // socket.broadcast.emit('new message', {
+            //     username: socket.username,
+            //     message: data
+            // });
         });
 
         // when the client emits 'add user', this listens and executes
@@ -69,39 +69,26 @@ var socketServer = function (server) {
                 }
             );
 
-            // (function (user) {
-            //     if (user === null) {
-            //         Tank.create({ size: 'small' }, function (err, small) {
-            //             if (err) return handleError(err);
-            //         })
-            //     }
-            // });
+            socket.join(username.roomId);
 
             ++numUsers;
+
             addedUser = true;
             socket.emit('login', {
                 numUsers: numUsers
             });
             // echo globally (all clients) that a person has connected
-            socket.broadcast.emit('user joined', {
+            socket.to(username.roomId).emit('user joined', {
                 username: socket.username,
                 numUsers: numUsers
             });
         });
 
-        // when the client emits 'typing', we broadcast it to others
-        socket.on('typing', function () {
-            socket.broadcast.emit('typing', {
-                username: socket.username
-            });
-        });
-
-        // when the client emits 'stop typing', we broadcast it to others
-        socket.on('stop typing', function () {
-            socket.broadcast.emit('stop typing', {
-                username: socket.username
-            });
-        });
+        // when the user disconnects.. perform this
+        // socket.on('join room', function (data) {
+        //     socket.leave(data.oldRoomId);
+        //     socket.join(data.roomid)
+        // });
 
         // when the user disconnects.. perform this
         socket.on('disconnect', function () {

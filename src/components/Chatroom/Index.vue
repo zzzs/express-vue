@@ -7,16 +7,15 @@
             <mt-button icon="more" slot="right"></mt-button>
         </mt-header>
         <div class="chat-main">
-            <div class="chat-panel">
-                <h1>房间</h1>
-                <a @click="clickRoom(item._id)" href="javascript:;" :key="key" v-for="(item, key) in roomData">
+            <mt-navbar v-model="currentRoom">
+                <mt-tab-item id="item._id" @click="clickRoom(item._id)" :key="key" v-for="(item, key) in roomData">
                     {{ item.name }}({{ roomUsersNum[item._id] === undefined ? 0 : roomUsersNum[item._id] }})
-                </a>
-
-                <h2>当前房间： {{ currentRoom }}</h2>
-
-                <div :class="username === item.username ? 'mine-msg' : ''" :key="'msg' + key" v-for="(item, key) in msgPool">
-                    {{ item.username }}: {{ item.msg }}
+                </mt-tab-item>
+            </mt-navbar>
+            <div class="chat-panel">
+                <div class="chat-item" :class="username === item.username ? 'mine-msg' : ''" :key="'msg' + key" v-for="(item, key) in msgPool">
+                    <div class="chat-name">{{ item.username }}</div>
+                    <div class="chat-msg">{{ item.msg }}</div>
                 </div>
             </div>
 
@@ -31,6 +30,7 @@
 <script>
 import io from 'socket.io-client'
 import { Toast, MessageBox } from 'mint-ui'
+
 export default {
     name: 'Chatroom',
     created () {
@@ -102,7 +102,7 @@ export default {
             msg: '',
             msgPool: [],
             roomData: [],
-            currentRoom: '',
+            currentRoom: '1',
             roomUsersNum: {},
             username: '',
             socket: null,

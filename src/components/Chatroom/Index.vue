@@ -9,11 +9,13 @@
         <div class="chat-main">
             <div class="chat-panel">
                 <h1>房间</h1>
-                <a @click="clickRoom(item._id)" href="javascript:;" :key="key" v-for="(item, key) in roomData">{{ item.name }}</a>
+                <a @click="clickRoom(item._id)" href="javascript:;" :key="key" v-for="(item, key) in roomData">
+                    {{ item.name }}({{ roomUsersNum[item._id] === undefined ? 0 : roomUsersNum[item._id] }})
+                </a>
 
                 <h2>当前房间： {{ currentRoom }}</h2>
 
-                <div :class="username === item.username ? 'mine-msg' : ''" :key="key" v-for="(item, key) in msgPool">
+                <div :class="username === item.username ? 'mine-msg' : ''" :key="'msg' + key" v-for="(item, key) in msgPool">
                     {{ item.username }}: {{ item.msg }}
                 </div>
             </div>
@@ -42,19 +44,33 @@ export default {
 
         this.socket.on('new message', function (data) {
             self.msgPool.push({
-                username: data.username.name,
+                username: data.user.name,
                 msg: data.message.msg
             })
         })
 
         this.socket.on('login', function (data) {
+            Toast({
+                message: '登录成功',
+                position: 'top',
+                duration: 3000
+            })
+
+            self.msgPool = data.chatData
+        })
+
+        this.socket.on('room changed', function (data) {
+            self.msgPool = data.chatData
+        })
+
+        this.socket.on('user num', function (data) {
             self.userNum = data.numUsers
+            self.roomUsersNum = data.roomUsersNum
         })
 
         this.socket.on('user joined', function (data) {
-            self.userNum = data.numUsers
             Toast({
-                message: data.username.name + 'is coming',
+                message: data.user.name + 'is coming',
                 position: 'bottom',
                 duration: 5000
             })
@@ -78,7 +94,7 @@ export default {
             }
             var oldRoomId = this.currentRoom
             this.currentRoom = roomId
-            this.socket.emit('join room', {roomId: this.currentRoom, oldRoomId: oldRoomId})
+            this.socket.emit('change room', {roomId: this.currentRoom, oldRoomId: oldRoomId})
         }
     },
     data () {
@@ -87,13 +103,13 @@ export default {
             msgPool: [],
             roomData: [],
             currentRoom: '',
+            roomUsersNum: {},
             username: '',
             socket: null,
             userNum: 0
         }
     },
     computed: {
-
     }
 }
 </script>

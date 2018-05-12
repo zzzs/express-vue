@@ -18,8 +18,7 @@
         </mt-field>
         <br>
         <mt-button type="default" @click="content.push('')">+</mt-button>
-<!-- style="position: absolute; bottom: 0;" -->
-        <mt-button @click="addVerse" type="primary" size="large">提交</mt-button>
+        <mt-button @click="addVerse" type="primary" size="large" style="position: absolute; bottom: 0;">提交</mt-button>
     </div>
 </template>
 

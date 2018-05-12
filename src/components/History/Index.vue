@@ -13,17 +13,17 @@
                 <mt-button style="width: 40px; float: left; margin: 5px;" type="primary">+</mt-button>
             </router-link>
         </div>
-
+        <template v-if="versesData.length !== 0">
         <mt-cell
             style="clear: both;"
             :key="'verse' + key" v-for="(item, key) in versesData"
-            :title="item.name + ' ' + item.aid"
-            :value="item.aid">
+            :title="item.name + ' ' + (item.aid ? item.aid.name : '')"
+            :value="item.aid ? item.aid.name : ''">
             <mt-button @click="showPopup(item)" style="margin-right: 5px;">展示</mt-button>
             <mt-button @click="deleteVerse(item)" type="danger">删除</mt-button>
         </mt-cell>
         <mt-popup
-            style="margin-top: 100px;"
+            style="margin-top: 100px; min-width: 200px;"
             position="top"
             popup-transition="popup-fade"
             v-model="popupVisible">
@@ -31,13 +31,14 @@
                 :title="popupData.name">
             </mt-cell>
             <mt-cell
-                :value="popupData.aid">
+                :value="popupData.aid ? popupData.aid.name : ''">
             </mt-cell>
             <mt-cell
                 :key="'popup' + key" v-for="(item, key) in popupData.content"
                 :title="item">
             </mt-cell>
         </mt-popup>
+        </template>
     </div>
 </template>
 

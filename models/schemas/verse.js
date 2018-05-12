@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var VerseSchema = new Schema({
     name: String,
     aid: String,
-    content: String,
+    content: 'Mixed',
     ctime: { type: Date, default: Date.now },
     mtime: { type: Date, default: Date.now }
 });

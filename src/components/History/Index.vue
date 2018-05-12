@@ -15,17 +15,26 @@
         </div>
 
         <mt-cell
-            is-link
             style="clear: both;"
             :key="'verse' + key" v-for="(item, key) in versesData"
-            :title="item.name"
+            :title="item.name + ' ' + item.aid"
             :value="item.aid">
-            <mt-button @click="showPopup(item)">展示</mt-button>
+            <mt-button @click="showPopup(item)" style="margin-right: 5px;">展示</mt-button>
+            <mt-button @click="deleteVerse(item)" type="danger">删除</mt-button>
         </mt-cell>
         <mt-popup
+            style="margin-top: 100px;"
+            position="top"
+            popup-transition="popup-fade"
             v-model="popupVisible">
             <mt-cell
-                :key="'popup' + key" v-for="(item, key) in popupContent"
+                :title="popupData.name">
+            </mt-cell>
+            <mt-cell
+                :value="popupData.aid">
+            </mt-cell>
+            <mt-cell
+                :key="'popup' + key" v-for="(item, key) in popupData.content"
                 :title="item">
             </mt-cell>
         </mt-popup>
@@ -33,6 +42,9 @@
 </template>
 
 <script>
+import { Toast, MessageBox } from 'mint-ui'
+import qs from 'qs'
+
 export default {
     name: 'History',
     data () {
@@ -40,7 +52,7 @@ export default {
             content: '',
             versesData: [],
             popupVisible: false,
-            popupContent: []
+            popupData: []
         }
     },
     mounted () {
@@ -48,9 +60,8 @@ export default {
     },
     methods: {
         showPopup (item) {
-            console.log('showPopup')
             this.popupVisible = true
-            this.popupContent = item.content
+            this.popupData = item
         },
         getVersesData () {
             let self = this
@@ -63,6 +74,35 @@ export default {
                     console.log(result.errmsg)
                 }
             })
+        },
+        deleteVerse (item) {
+            var self = this
+            let msg = '确定删除这首【' + item.name + '】吗?'
+            MessageBox.confirm(msg)
+                .then(action => {
+                    fetch('/verses/delete', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+                        },
+                        body: qs.stringify({id: item._id})
+                    }).then(function (response) {
+                        return response.json()
+                    }).then(function (result) {
+                        if (result.errcode === 0) {
+                            Toast({
+                                message: '提交成功',
+                                position: 'top',
+                                duration: 2000
+                            })
+                            self.getVersesData()
+                        } else {
+                            console.log(result.errmsg)
+                        }
+                    })
+                })
+                .catch(() => {
+                })
         }
     },
     computed: {

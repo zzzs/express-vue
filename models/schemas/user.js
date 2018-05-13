@@ -3,7 +3,11 @@ var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
     name:  String,
-	password:  String
+	password:  String,
+    nickname: String,
+    ctime: { type: Date, default: Date.now },
+    mtime: { type: Date, default: Date.now },
+    logincount: Number
 });
 
 UserSchema.methods = {

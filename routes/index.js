@@ -7,7 +7,7 @@ var user = new User();
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	user.findSimilarTypes(function(err, user) {
-		res.json({ title: 'Express' });
+		res.json({ title: 'Express-vue' });
 	});
 });
 

@@ -21,6 +21,9 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+require('./../server/socket_server')(server);
+require('./../server/mongodb');
+
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -28,6 +31,7 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
 
 /**
  * Normalize a port into a number, string, or false.

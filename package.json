@@ -18,7 +18,7 @@
     "express": "~4.15.5",
     "jade": "~1.11.0",
     "mint-ui": "^2.2.13",
-    "mongoose": "^5.0.14",
+    "mongoose": "^6.4.6",
     "morgan": "~1.9.0",
     "serve-favicon": "~2.4.5",
     "socket.io": "^2.1.0",

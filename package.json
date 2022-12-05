@@ -12,10 +12,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "body-parser": "~1.18.2",
+    "body-parser": "~1.19.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
-    "express": "~4.15.5",
+    "express": "~4.17.3",
     "jade": "~1.11.0",
     "mint-ui": "^2.2.13",
     "mongoose": "^5.0.14",

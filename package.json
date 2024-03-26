@@ -15,7 +15,7 @@
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
-    "express": "~4.15.5",
+    "express": "~4.19.2",
     "jade": "~1.11.0",
     "mint-ui": "^2.2.13",
     "mongoose": "^5.0.14",

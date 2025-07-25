@@ -19,7 +19,7 @@
     "jade": "~1.11.0",
     "mint-ui": "^2.2.13",
     "mongoose": "^5.0.14",
-    "morgan": "~1.9.0",
+    "morgan": "~1.10.1",
     "serve-favicon": "~2.4.5",
     "socket.io": "^2.1.0",
     "vue": "^2.5.2",
